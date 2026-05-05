@@ -12,6 +12,7 @@ const[product_name, setProductName] = useState("");
 const[product_decsription, setProductDescription] = useState("");
 const[product_cost, setProductCost] = useState("");
 const[product_photo, setProductPhoto] = useState("");
+const[category, setCategory] = useState("");
 // declare the additional hooks to manage the state of the application
 const [loading, setLoading] = useState(false);
 const [success, setSuccess] = useState("");
@@ -33,6 +34,7 @@ const handleSubmit = async (e) =>{
     formdata.append("product_description", product_decsription);
     formdata.append("product_cost", product_cost);
     formdata.append("product_photo", product_photo);
+    formdata.append("category", category);
 
     //  interact with axios to help you use the method post
     const response = await axios.post("https://jermaine234.alwaysdata.net/api/add_products", formdata)
@@ -48,6 +50,7 @@ const handleSubmit = async (e) =>{
     setProductDescription("");
     setProductCost("");
     setProductPhoto("");
+    setCategory("");
 
     e.target.reset()
 
@@ -95,7 +98,7 @@ const handleSubmit = async (e) =>{
           textAlign:"center",
           textShadow:"0 0 10px lime"
         }}>
-          Welcom Add your custom car
+          Welcome Add your custom car
         </h3>
 
         {loading && <Loader />}
@@ -127,6 +130,13 @@ const handleSubmit = async (e) =>{
           required
           value={product_cost}
           onChange={(e) => setProductCost(e.target.value)} /> <br />
+
+             <input type="test"
+          placeholder='Insert the categoory'
+          style={inputStyle}
+          required
+          value={category}
+          onChange={(e) => setCategory(e.target.value)} /> <br />
 
 
           {/*  label */}

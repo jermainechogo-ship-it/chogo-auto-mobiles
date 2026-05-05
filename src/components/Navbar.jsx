@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const Navbar = ({ search, setSearch }) => {
   return (
@@ -10,10 +10,10 @@ const Navbar = ({ search, setSearch }) => {
       justifyContent: "space-between",
       alignItems: "center"
     }}>
-        
+
       <h2>Chogo's auto mobiles</h2>
 
-      {/* ⭐ ADDED SEARCH BAR */}
+      {/* Search */}
       <input
         type="text"
         placeholder="Search cars..."
@@ -28,37 +28,39 @@ const Navbar = ({ search, setSearch }) => {
       />
 
       <div>
-        <Link style={{color:"white", marginRight:"20px"}} to="/">
+
+        <Link style={{ color: "white", marginRight: "20px" }} to="/">
           Home
         </Link>
 
-        <Link style={{color:"white", marginRight:"20px"}} to="/signin">
+        <Link style={{ color: "white", marginRight: "20px" }} to="/signin">
           Signin
         </Link>
 
-        <Link style={{color:"white", marginRight:"20px"}} to="/signup">
+        <Link style={{ color: "white", marginRight: "20px" }} to="/signup">
           Signup
         </Link>
 
-        <Link style={{color:"white", marginRight:"20px"}} to="/addproduct">
+        <Link style={{ color: "white", marginRight: "20px" }} to="/addproduct">
           Add Product
         </Link>
 
-        <Link style={{color:"white", marginRight:"20px"}} to="/Luxury">
-          luxury
+        {/* ✅ FIXED ROUTES (IMPORTANT) */}
+        <Link style={{ color: "white", marginRight: "20px" }} to="/luxury">
+          Luxury
         </Link>
-        
-        <Link style={{color:"white", marginRight:"20px"}} to="/Offroad">
+
+        <Link style={{ color: "white", marginRight: "20px" }} to="/offroad">
           Offroad
         </Link>
 
-        <Link style={{color:"white", marginRight:"20px"}} to="/Classic">
+        <Link style={{ color: "white", marginRight: "20px" }} to="/classic">
           Classic
         </Link>
 
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
