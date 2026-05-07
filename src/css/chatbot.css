@@ -1,0 +1,127 @@
+.car-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  max-width: 100%;
+}
+
+.car-card {
+  background: #0f0f0f;
+  border: 1px solid lime;
+  border-radius: 8px;
+  padding: 8px;
+  width: 100%;
+  max-width: 260px;   /* keeps it inside terminal */
+}
+
+.car-img-wrapper {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.car-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* THIS fixes image stretching */
+}
+
+.car-card h4 {
+  margin: 6px 0 2px;
+  color: lime;
+  font-size: 14px;
+}
+
+.car-card p {
+  margin: 0;
+  color: white;
+  font-size: 12px;
+  opacity: 0.8;
+}.chat-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.chat-window {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  width: 320px;
+  background: black;
+  border: 1px solid lime;
+  color: lime;
+  font-family: monospace;
+}
+
+.chat-header {
+  padding: 10px;
+  border-bottom: 1px solid lime;
+  text-align: center;
+}
+
+.chat-body {
+  height: 250px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.msg {
+  margin: 5px 0;
+}
+
+.user {
+  text-align: right;
+  color: white;
+}
+
+.bot {
+  text-align: left;
+  color: lime;
+}
+
+.chat-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px;
+}
+
+.chat-buttons button {
+  background: black;
+  color: lime;
+  border: 1px solid lime;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.chat-input {
+  display: flex;
+  border-top: 1px solid lime;
+}
+
+.chat-input input {
+  flex: 1;
+  background: black;
+  color: lime;
+  border: none;
+  padding: 5px;
+}
+
+.chat-input button {
+  background: black;
+  color: lime;
+  border: 1px solid lime;
+}
+
+.typing {
+  font-size: 10px;
+  opacity: 0.7;
+}
