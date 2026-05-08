@@ -23,6 +23,21 @@ const Getproducts = ({ search }) => {
 
   const [toast, setToast] = useState("");
 
+  // 🎥 VIDEO CAROUSEL ADDED BACK
+  const videos = [phanton, rtgt, phanton];
+
+  const [videoIndex, setVideoIndex] = useState(0);
+
+  const nextVideo = () => {
+    setVideoIndex((prev) => (prev + 1) % videos.length);
+  };
+
+  const prevVideo = () => {
+    setVideoIndex((prev) =>
+      prev === 0 ? videos.length - 1 : prev - 1
+    );
+  };
+
   const navigate = useNavigate();
   const img_url = "https://jermaine234.alwaysdata.net/static/images/";
 
@@ -110,6 +125,60 @@ const Getproducts = ({ search }) => {
       )}
 
       <div className="row">
+
+        {/* 🎥 VIDEO CAROUSEL RESTORED */}
+        <div
+          style={{
+            backgroundColor: "#000",
+            padding: "20px",
+            marginBottom: "20px",
+            borderRadius: "12px"
+          }}
+        >
+          <h2
+            style={{
+              color: "#00d4ff",
+              textAlign: "center",
+              marginBottom: "15px"
+            }}
+          >
+            🚘 Car Video Showcase
+          </h2>
+
+          <motion.video
+            key={videoIndex}
+            width="100%"
+            controls
+            autoPlay
+            muted
+            loop
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              borderRadius: "12px",
+              border: "2px solid #00d4ff"
+            }}
+          >
+            <source src={videos[videoIndex]} type="video/mp4" />
+          </motion.video>
+
+          <div style={{ textAlign: "center", marginTop: "15px" }}>
+            <button
+              className="btn btn-outline-info me-2"
+              onClick={prevVideo}
+            >
+              ⬅ Prev
+            </button>
+
+            <button
+              className="btn btn-outline-info"
+              onClick={nextVideo}
+            >
+              Next ➡
+            </button>
+          </div>
+        </div>
 
         <div className="mb-3">
           {["all", "luxury", "classic", "offroad"].map((cat) => (

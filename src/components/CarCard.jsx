@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 // ✨ ADDED (extra animation tools, harmless if unused)
@@ -13,6 +13,53 @@ const CarCard = ({
   onWishlist,
   isWished
 }) => {
+
+  // 💸 FIXED: safer price extraction (handles strings like "$50,000" or "KES 12M")
+  const numericPrice =
+    typeof price === "number"
+      ? price
+      : Number(String(price).replace(/[^0-9.]/g, "")) || 0;
+
+  const [downPayment, setDownPayment] = useState(Math.round(numericPrice * 0.2));
+  const [years, setYears] = useState(5 + Math.floor(numericPrice / 50000));
+  const [interestRate, setInterestRate] = useState(7 + Math.random());
+
+  // 🧠 CREDIT SCORE SIMULATION (NEW ADDITION)
+  const creditScore = 550 + Math.floor(Math.random() * 250);
+
+  // 🏦 BANK APPROVAL LOGIC (NEW ADDITION)
+  const approvalStatus =
+    creditScore >= 750
+      ? "APPROVED 🟢"
+      : creditScore >= 650
+      ? "PENDING 🟡"
+      : "REJECTED 🔴";
+
+  // 💸 ADJUST INTEREST BASED ON CREDIT SCORE (NEW ADDITION)
+  const adjustedInterestRate =
+    creditScore >= 750
+      ? interestRate - 2
+      : creditScore >= 650
+      ? interestRate
+      : interestRate + 3;
+
+  // 💸 FINANCING CALCULATION (now truly per-card correct)
+  const loanAmount = Math.max(numericPrice - downPayment, 0);
+
+  const monthlyInterest = adjustedInterestRate / 100 / 12;
+
+  const numberOfPayments = years * 12;
+
+  const monthlyPayment =
+    loanAmount > 0
+      ? (
+          (loanAmount *
+            monthlyInterest *
+            Math.pow(1 + monthlyInterest, numberOfPayments)) /
+          (Math.pow(1 + monthlyInterest, numberOfPayments) - 1)
+        ).toFixed(2)
+      : "0.00";
+
   return (
     <motion.div
       style={{
@@ -52,8 +99,9 @@ const CarCard = ({
           {description?.slice(0, 90)}...
         </p>
 
+        {/* 💸 FIXED DISPLAY */}
         <h4 style={{ color: "#00d4ff" }}>
-          ${price}
+          ${numericPrice}
         </h4>
 
         <button
@@ -67,10 +115,8 @@ const CarCard = ({
             marginTop: "10px"
           }}
 
-          // ✨ ADDED micro interaction
           onMouseEnter={(e) => (e.target.style.filter = "brightness(1.2)")}
           onMouseLeave={(e) => (e.target.style.filter = "brightness(1)")}
-
           onMouseDown={(e) => (e.target.style.transform = "scale(0.96)")}
           onMouseUp={(e) => (e.target.style.transform = "scale(1)")}
         >
@@ -88,7 +134,6 @@ const CarCard = ({
             borderRadius: "5px"
           }}
 
-          // ✨ ADDED glow interaction
           onMouseEnter={(e) =>
             (e.target.style.boxShadow = "0 0 10px red")
           }
@@ -98,6 +143,111 @@ const CarCard = ({
         >
           {isWished ? "❤️ Saved" : "🤍 Wishlist"}
         </button>
+
+        {/* 🏦 BANK INFO (NEW ADDITION UI) */}
+        <div style={{ marginTop: "10px", fontSize: "12px" }}>
+          <p>Bank Decision: <strong>{approvalStatus}</strong></p>
+          <p>Credit Score: {creditScore}</p>
+        </div>
+
+        {/* 💸 FINANCING CALCULATOR */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          style={{
+            marginTop: "20px",
+            padding: "12px",
+            background: "#1a1a1a",
+            borderRadius: "10px",
+            border: "1px solid #333"
+          }}
+        >
+
+          <h5 style={{ color: "#00d4ff" }}>
+            💸 Financing Calculator
+          </h5>
+
+          <p style={{ fontSize: "12px", opacity: 0.7 }}>
+            A machine like this deserves a smart payment plan 😌🏎️
+          </p>
+
+          <label style={{ fontSize: "12px" }}>
+            Down Payment
+          </label>
+
+          <input
+            type="number"
+            value={downPayment}
+            onChange={(e) => setDownPayment(Number(e.target.value))}
+            style={{
+              width: "100%",
+              marginBottom: "10px",
+              padding: "6px",
+              borderRadius: "5px",
+              border: "none"
+            }}
+          />
+
+          <label style={{ fontSize: "12px" }}>
+            Loan Years
+          </label>
+
+          <input
+            type="number"
+            value={years}
+            onChange={(e) => setYears(Number(e.target.value))}
+            style={{
+              width: "100%",
+              marginBottom: "10px",
+              padding: "6px",
+              borderRadius: "5px",
+              border: "none"
+            }}
+          />
+
+          <label style={{ fontSize: "12px" }}>
+            Interest Rate %
+          </label>
+
+          <input
+            type="number"
+            value={interestRate}
+            onChange={(e) => setInterestRate(Number(e.target.value))}
+            style={{
+              width: "100%",
+              marginBottom: "10px",
+              padding: "6px",
+              borderRadius: "5px",
+              border: "none"
+            }}
+          />
+
+          <motion.div
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ duration: 0.4 }}
+            style={{
+              background: "#000",
+              padding: "10px",
+              borderRadius: "8px",
+              marginTop: "10px",
+              border: "1px solid #00d4ff"
+            }}
+          >
+            <p style={{ margin: 0, opacity: 0.7 }}>
+              Estimated Monthly Payment
+            </p>
+
+            <h4 style={{ color: "#00ff99", marginTop: "5px" }}>
+              ${monthlyPayment}/month
+            </h4>
+
+            <p style={{ fontSize: "12px", opacity: 0.6 }}>
+              Clean choice. This build has excellent taste written all over it ✨
+            </p>
+          </motion.div>
+
+        </motion.div>
       </div>
     </motion.div>
   );

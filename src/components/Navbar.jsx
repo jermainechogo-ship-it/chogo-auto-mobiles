@@ -56,6 +56,9 @@ const Navbar = ({ search, setSearch, darkMode, setDarkMode }) => {
         <Link className="nav-link" to="/wishlist">
           ❤️ Wishlist ({wishlistCount})
         </Link>
+        <Link className="nav-link" to="/admin">
+          Admin 
+        </Link>
 
         {/* Dark Mode Toggle */}
         <button

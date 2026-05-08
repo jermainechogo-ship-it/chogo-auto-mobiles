@@ -21,6 +21,8 @@ import Wishlist from './components/Wishlist';
 // Chatbot
 import Chatbot from "./components/Chatbot";
 
+import AdminDashboard from "./components/AdminDashboard";
+
 function App() {
 
   const [search, setSearch] = useState("");
@@ -68,6 +70,7 @@ function App() {
           <Route path='/Luxury' element={<Luxury />} />
           <Route path='/Offroad' element={<Offroad />} />
           <Route path='/Classic' element={<Classic />} />
+          <Route path="/admin" element={<AdminDashboard />} />
 
           {/* ❤️ WISHLIST ROUTE (THIS WAS MISSING) */}
           <Route path='/wishlist' element={<Wishlist />} />
