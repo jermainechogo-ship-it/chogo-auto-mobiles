@@ -89,6 +89,23 @@ function Chatbot() {
       cars: carData.classic
     };
   }
+  if (
+  msg.includes("wishlist") ||
+  msg.includes("show my wishlist") ||
+  msg.includes("my saved cars")
+) {
+  const saved = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+  if (saved.length === 0) {
+    return { text: "Your wishlist is empty right now 🚗" };
+  }
+
+  return {
+    text:
+      "Here are your saved cars: " +
+      saved.map((c) => c.product_name).join(", ")
+  };
+}
 
   if (msg.includes("help")) {
     return {

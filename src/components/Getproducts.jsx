@@ -1,164 +1,166 @@
-import phanton from "../car-images/phanton.mp4"; 
+import phanton from "../car-images/phanton.mp4";
 import rtgt from "../car-images/rtgt.mp4";
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import Loader from './Loader';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import Loader from "./Loader";
 import Footer from "./Footer";
-import Navbar from "./Navbar";
-import { useNavigate } from 'react-router-dom';
+import CarCard from "./CarCard";
+import { useNavigate } from "react-router-dom";
+
+// ✨ ADDED
+import { motion } from "framer-motion";
 
 const Getproducts = ({ search }) => {
-
-  // State management
-  const [products, setProducts] = useState([]); 
+  const [products, setProducts] = useState([]);
   const [loading, setLoadding] = useState(false);
   const [error, setError] = useState("");
 
-  // ⭐ Category filter state
   const [category, setCategory] = useState("all");
 
-  // Video showcase
-  const videos = [phanton, rtgt, phanton];
-  const [videoIndex, setVideoIndex] = useState(0);
+  const [wishlist, setWishlist] = useState(() => {
+    return JSON.parse(localStorage.getItem("wishlist")) || [];
+  });
 
-  const nextVideo = () => {
-    setVideoIndex((videoIndex + 1) % videos.length);
-  };
+  const [toast, setToast] = useState("");
 
-  const prevVideo = () => {
-    setVideoIndex((videoIndex - 1 + videos.length) % videos.length);
-  };
+  const navigate = useNavigate();
+  const img_url = "https://jermaine234.alwaysdata.net/static/images/";
 
-  const navigate = useNavigate()
-
-  const img_url = "https://jermaine234.alwaysdata.net/static/images/"
-
-  // Fetch products
   const fetchProducts = async () => {
     try {
-      setLoadding(true)
-      const response = await axios.get("https://jermaine234.alwaysdata.net/api/get_products")
-      setProducts(response.data)
-      setLoadding(false)
+      setLoadding(true);
+      const response = await axios.get(
+        "https://jermaine234.alwaysdata.net/api/get_products"
+      );
+      setProducts(response.data);
+      setLoadding(false);
     } catch (error) {
-      setLoadding(false)
-      setError(error.message)
+      setLoadding(false);
+      setError(error.message);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchProducts()
-  }, [])
+    fetchProducts();
+  }, []);
 
-  // ⭐ Filter logic
-  const filteredProducts = category === "all"
-    ? products
-    : products.filter(product => product.category === category);
+  const toggleWishlist = (product) => {
+    const exists = wishlist.some(
+      (item) => item.product_id === product.product_id
+    );
+
+    let updated;
+
+    if (exists) {
+      updated = wishlist.filter(
+        (item) => item.product_id !== product.product_id
+      );
+      setToast("Removed from wishlist ❌");
+    } else {
+      updated = [...wishlist, product];
+      setToast("Added to wishlist ❤️");
+    }
+
+    setWishlist(updated);
+    localStorage.setItem("wishlist", JSON.stringify(updated));
+
+    setTimeout(() => setToast(""), 2000);
+  };
+
+  const filteredProducts =
+    category === "all"
+      ? products
+      : products.filter((p) => p.category === category);
+
+  // ✨ ADDED ANIMATION VARIANTS
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 25 },
+    show: { opacity: 1, y: 0 }
+  };
 
   return (
     <>
-      <Navbar />
+      {/* 🔔 TOAST */}
+      {toast && (
+        <div
+          style={{
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            background: "#111",
+            color: "#fff",
+            padding: "10px 15px",
+            borderRadius: "8px",
+            border: "1px solid #00d4ff",
+            zIndex: 9999
+          }}
+        >
+          {toast}
+        </div>
+      )}
 
-      <div className='row'>
+      <div className="row">
 
-        {/* Video Section */}
-        <div style={{ backgroundColor: "black", padding: "20px", marginBottom: "20px", borderRadius: "10px" }}>
-          <h2 style={{ color: "lime", textAlign: "center", textShadow: "0 0 10px lime" }}>
-            Car Video Showcase
-          </h2>
-
-          <video
-            key={videoIndex}
-            width="100%"
-            controls
-            autoPlay
-            muted
-            loop
-            style={{ border: "2px solid lime", borderRadius: "10px", display: "block", margin: "0 auto" }}
-          >
-            <source src={videos[videoIndex]} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-
-          <div style={{ textAlign: "center", marginTop: "10px" }}>
-            <button className="btn btn-outline-success me-2" onClick={prevVideo}>Prev</button>
-            <button className="btn btn-outline-success" onClick={nextVideo}>Next</button>
-          </div>
+        <div className="mb-3">
+          {["all", "luxury", "classic", "offroad"].map((cat) => (
+            <button
+              key={cat}
+              className={`btn me-2 ${
+                category === cat ? "btn-primary" : "btn-outline-primary"
+              }`}
+              onClick={() => setCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
 
-        {/* Heading */}
-        <h2 className="text-info">Available Automobiles</h2>
-
-        {/* ⭐ Category Filter Buttons */}
-        <div className="mb-3">
-          <button 
-            className={`btn me-2 ${category === "all" ? "btn-primary" : "btn-outline-primary"}`} 
-            onClick={() => setCategory("all")}
-          >
-            All
-          </button>
-
-          <button 
-            className={`btn me-2 ${category === "luxury" ? "btn-primary" : "btn-outline-primary"}`} 
-            onClick={() => setCategory("luxury")}
-          >
-            Luxury
-          </button>
-
-          <button 
-            className={`btn me-2 ${category === "classic" ? "btn-primary" : "btn-outline-primary"}`} 
-            onClick={() => setCategory("classic")}
-          >
-            Classic
-          </button>
-
-          <button 
-            className={`btn ${category === "offroad" ? "btn-primary" : "btn-outline-primary"}`} 
-            onClick={() => setCategory("offroad")}
-          >
-            Offroad
-          </button>
-        </div>               
-
-        {/* Loading + Error */}
         {loading && <Loader />}
         <h4 className="text-danger">{error}</h4>
 
-        {/* Products */}
-        {filteredProducts.map((product) => (
-          <div className="col-md-3 justify-content-center mb-3" key={product.product_id}>
-            <div className="card shadow">
-              <img 
-                src={img_url + product.product_photo} 
-                alt={product.product_name} 
-                className='product_img mt-3'
+        {/* ✨ ANIMATED CONTAINER ADDED */}
+        <motion.div
+          style={{ display: "flex", flexWrap: "wrap" }}
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+        >
+          {filteredProducts.map((product) => (
+            <motion.div key={product.product_id} variants={cardVariants}>
+
+              <CarCard
+                image={img_url + product.product_photo}
+                name={product.product_name}
+                description={product.product_description}
+                price={product.product_cost}
+                onClick={() =>
+                  navigate("/makepayment", { state: { product } })
+                }
+                onWishlist={() => toggleWishlist(product)}
+                isWished={wishlist.some(
+                  (item) => item.product_id === product.product_id
+                )}
               />
 
-              <div className="card-body">
-                <h5 className="text-secondary">{product.product_name}</h5>
-
-                <p className="text-dark">
-                  {product.product_description.slice(0, 100)}...
-                </p>
-
-                <h5 className="text-info">$ {product.product_cost}</h5>
-
-                <button 
-                  className='btn btn-outline-info' 
-                  onClick={() => navigate("/makepayment", { state: { product } })}
-                >
-                  Order now
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+            </motion.div>
+          ))}
+        </motion.div>
 
       </div>
 
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Getproducts
+export default Getproducts;

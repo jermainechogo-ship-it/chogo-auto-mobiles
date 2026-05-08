@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 
-const Navbar = ({ search, setSearch }) => {
-  return (
-    <nav style={{
-      backgroundColor: "black",
-      padding: "15px",
-      color: "white",
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center"
-    }}>
+const Navbar = ({ search, setSearch, darkMode, setDarkMode }) => {
 
-      <h2>Chogo's auto mobiles</h2>
+  // ❤️ optional wishlist counter (reads localStorage)
+  const wishlistCount =
+    JSON.parse(localStorage.getItem("wishlist"))?.length || 0;
+
+  return (
+    <nav className={`navbar-container ${darkMode ? "dark" : "light"}`}>
+
+      <h2 className="logo-text">
+        🚘 Chogo's Auto Mobiles
+      </h2>
 
       {/* Search */}
       <input
@@ -19,44 +19,51 @@ const Navbar = ({ search, setSearch }) => {
         placeholder="Search cars..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        style={{
-          padding: "5px",
-          borderRadius: "5px",
-          border: "1px solid gray",
-          width: "200px"
-        }}
+        className="search-input"
       />
 
-      <div>
+      <div className="nav-links">
 
-        <Link style={{ color: "white", marginRight: "20px" }} to="/">
+        <Link className="nav-link" to="/">
           Home
         </Link>
 
-        <Link style={{ color: "white", marginRight: "20px" }} to="/signin">
+        <Link className="nav-link" to="/signin">
           Signin
         </Link>
 
-        <Link style={{ color: "white", marginRight: "20px" }} to="/signup">
+        <Link className="nav-link" to="/signup">
           Signup
         </Link>
 
-        <Link style={{ color: "white", marginRight: "20px" }} to="/addproduct">
+        <Link className="nav-link" to="/addproduct">
           Add Product
         </Link>
 
-        {/* ✅ FIXED ROUTES (IMPORTANT) */}
-        <Link style={{ color: "white", marginRight: "20px" }} to="/luxury">
+        <Link className="nav-link" to="/luxury">
           Luxury
         </Link>
 
-        <Link style={{ color: "white", marginRight: "20px" }} to="/offroad">
+        <Link className="nav-link" to="/offroad">
           Offroad
         </Link>
 
-        <Link style={{ color: "white", marginRight: "20px" }} to="/classic">
+        <Link className="nav-link" to="/classic">
           Classic
         </Link>
+
+        {/* ❤️ WISHLIST LINK (NEW FEATURE) */}
+        <Link className="nav-link" to="/wishlist">
+          ❤️ Wishlist ({wishlistCount})
+        </Link>
+
+        {/* Dark Mode Toggle */}
+        <button
+          className="theme-btn"
+          onClick={() => setDarkMode(!darkMode)}
+        >
+          {darkMode ? "☀️ Light" : "🌙 Dark"}
+        </button>
 
       </div>
     </nav>

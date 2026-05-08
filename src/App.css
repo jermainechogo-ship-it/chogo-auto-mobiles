@@ -1,38 +1,119 @@
-.App {
-  text-align: center;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* LIGHT MODE */
+body {
+  background-color: #f5f5f5;
+  color: black;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #000000;
-  min-height: 10vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* DARK MODE */
+body.dark-mode {
+  background-color: #121212;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* APP */
+.App {
+  min-height: 100vh;
+  transition: all 0.4s ease;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* HEADER */
+.App-header {
+  background: linear-gradient(135deg, #000000, #1f1f1f);
+  min-height: 18vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.welcome-text {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* NAVBAR */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.4s ease;
+}
+
+.navbar-container.light {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-container.dark {
+  background-color: #1e1e1e;
+  box-shadow: 0 2px 10px rgba(255,255,255,0.1);
+}
+
+/* LOGO */
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* SEARCH */
+.search-input {
+  padding: 10px;
+  width: 220px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.search-input:focus {
+  transform: scale(1.05);
+}
+
+/* NAV LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #00bfff;
+  transform: translateY(-2px);
+}
+
+/* THEME BUTTON */
+.theme-btn {
+  background: #00bfff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.theme-btn:hover {
+  transform: scale(1.08);
+  background: #009acd;
 }

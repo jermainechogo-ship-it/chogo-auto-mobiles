@@ -1,100 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import "../css/footer.css";
 
 function Footer() {
-
   const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
   const [remark, setRemark] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [typedText, setTypedText] = useState("");
+
+  const emojis = ["😡", "😕", "😐", "😊", "🤩"];
+
+  // 💾 localStorage save (no backend needed)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const feedback = {
+      rating,
+      remark,
+      time: new Date().toISOString(),
+    };
+
+    localStorage.setItem("feedback", JSON.stringify(feedback));
+
+    setSubmitted(true);
+    setTimeout(() => setSubmitted(false), 2500);
+
+    setRemark("");
+    setRating(0);
+  };
+
+  // ⌨️ typing animation
+  useEffect(() => {
+    const text = "Leave your feedback...";
+    let i = 0;
+
+    const interval = setInterval(() => {
+      setTypedText(text.slice(0, i));
+      i++;
+      if (i > text.length) clearInterval(interval);
+    }, 80);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div
-      style={{
-        background: "black",
-        color: "white",
-        padding: "40px",
-        marginTop: "40px"
-      }}
-    >
+    <footer className="cyber-footer">
+      <h2 className="title">Feedback Console</h2>
 
-      <div className="row">
-
-        {/* ⭐ SECTION 1 ABOUT */}
-        <div className="col-md-4">
-          <h4 style={{
-            color: "purple",
-            textShadow: "0 0 10px darkviolet"
-          }}>
-            About Us
-          </h4>
-
-          <p>
-            Jermaine AutoMarket is committed to providing high quality automobiles,
-            trusted services and seamless purchasing experience.
-            Our goal is to connect drivers with performance, reliability and innovation.
-          </p>
-        </div>
-
-        {/* ⭐ SECTION 2 RATING */}
-        <div className="col-md-4">
-          <h4 style={{
-            color: "purple",
-            textShadow: "0 0 10px darkviolet"
-          }}>
-            Rate Our Service
-          </h4>
-
-          <div>
-            {[1,2,3,4,5].map((star)=>(
-              <span
-                key={star}
-                onClick={()=>setRating(star)}
-                style={{
-                  fontSize:"30px",
-                  cursor:"pointer",
-                  color: star <= rating ? "gold" : "gray"
-                }}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-
-          <textarea
-            placeholder="Send us your remarks..."
-            className="form-control mt-2"
-            value={remark}
-            onChange={(e)=>setRemark(e.target.value)}
-          />
-
-          <button className="btn btn-outline-light mt-2">
-            Submit Feedback
-          </button>
-
-        </div>
-
-        {/* ⭐ SECTION 3 CONTACT */}
-        <div className="col-md-4">
-          <h4 style={{
-            color: "purple",
-            textShadow: "0 0 10px darkviolet"
-          }}>
-            Contact Us
-          </h4>
-
-          <p>Email: support@jermaineautomarket.com</p>
-          <p>Phone: +254 700 000 000</p>
-          <p>Location: Nairobi, Kenya</p>
-
-        </div>
-
+      {/*  STAR RATING */}
+      <div className="stars">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span
+            key={star}
+            className={star <= (hover || rating) ? "star active" : "star"}
+            onClick={() => setRating(star)}
+            onMouseEnter={() => setHover(star)}
+            onMouseLeave={() => setHover(0)}
+          >
+            ★
+          </span>
+        ))}
       </div>
 
-      <hr style={{borderColor:"purple"}}/>
-
-      <div style={{textAlign:"center"}}>
-        © 2026 Jermaine AutoMarket — All Rights Reserved
+      {/* EMOJI REACTIONS */}
+      <div className="emoji-row">
+        {emojis.map((em, i) => (
+          <span
+            key={i}
+            className={rating === i + 1 ? "emoji active" : "emoji"}
+            onClick={() => setRating(i + 1)}
+          >
+            {em}
+          </span>
+        ))}
       </div>
 
-    </div>
+      {/* 💬 INPUT */}
+      <form onSubmit={handleSubmit}>
+        <textarea
+          value={remark}
+          onChange={(e) => setRemark(e.target.value)}
+          placeholder={typedText}
+          maxLength={200}
+        />
+
+        {/* 📊 CHARACTER COUNTER */}
+        <div className="counter">{remark.length}/200</div>
+
+        {/* 🔥 GLASS GLOW BUTTON */}
+        <button className="glow-btn" type="submit">
+          Submit Feedback
+        </button>
+      </form>
+
+      {/* 🎉 THANK YOU POPUP */}
+      {submitted && (
+        <div className="popup">
+          Thank you for your feedback ✨
+        </div>
+      )}
+    </footer>
   );
 }
 
